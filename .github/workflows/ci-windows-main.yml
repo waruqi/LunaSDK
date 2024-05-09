@@ -52,7 +52,7 @@ jobs:
           
       - name: Configure xmake debug
         run: |
-          git clone https://github.com/xmake-io/xmake.git --recurse-submodules -b master xmakesrc
+          git clone https://github.com/xmake-io/xmake.git --recurse-submodules -b test xmakesrc
           cd xmakesrc/core
           xmake
           cd ../..
