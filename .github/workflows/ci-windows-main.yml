@@ -54,7 +54,7 @@ jobs:
         run: |
           git clone https://github.com/xmake-io/xmake.git --recurse-submodules -b test xmakesrc
           cd xmakesrc/core
-          xmake
+          xmake -P .
           cd ../..
           Copy-Item ./xmakesrc/core/build/xmake.exe ./xmakesrc/xmake
           Copy-Item ./xmakesrc/scripts/xrepo.bat ./xmakesrc/xmake
