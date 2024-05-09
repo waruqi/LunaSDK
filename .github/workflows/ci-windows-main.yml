@@ -30,7 +30,7 @@ jobs:
       - name: Install xmake
         uses: xmake-io/github-action-setup-xmake@v1
         with:
-          xmake-version: branch@dev
+          xmake-version: latest
       
       - name: Setup project
         run: ./setup.bat
