@@ -51,7 +51,18 @@ jobs:
       #     key: ${{ matrix.os }}-${{ matrix.toolchain }}-${{ matrix.arch }}-${{ steps.dep_hash.outputs.hash }}-W${{ steps.cache_key.outputs.key }}
           
       - name: Configure xmake debug
-        run: xmake f --mode=debug --contract_assertion=y --thread_safe_assertion=y --arch=${{ matrix.arch }} --toolchain=${{ matrix.toolchain }} -c -y -v --rhi_debug=y --rhi_api=${{ matrix.rhi_api }} --shared=${{ matrix.shared == 'shared' && 'y' || 'n'}}
+        run: |
+          git clone https://github.com/xmake-io/xmake.git --recurse-submodules -b master xmakesrc
+          cd xmakesrc/core
+          xmake
+          cd ../..
+          Copy-Item ./xmakesrc/core/build/xmake.exe ./xmakesrc/xmake
+          Copy-Item ./xmakesrc/scripts/xrepo.bat ./xmakesrc/xmake
+          Copy-Item ./xmakesrc/scripts/xrepo.ps1 ./xmakesrc/xmake
+          $Env:XMAKE_MAIN_REPO = "https://github.com/xmake-io/xmake-repo.git"
+          $Env:XMAKE_PROGRAM_DIR = $(Resolve-Path ./xmakesrc/xmake)
+          Set-Item -Path Env:Path -Value ($Env:XMAKE_PROGRAM_DIR + ";" + $Env:Path)
+          xmake f --mode=debug --contract_assertion=y --thread_safe_assertion=y --arch=${{ matrix.arch }} --toolchain=${{ matrix.toolchain }} -c -y -v --rhi_debug=y --rhi_api=${{ matrix.rhi_api }} --shared=${{ matrix.shared == 'shared' && 'y' || 'n'}}
         
       - name: Build debug
         run: xmake build -y -v
